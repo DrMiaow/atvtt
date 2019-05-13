@@ -52,4 +52,153 @@ sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 ```
 Append this line to the end.
 
+```
 `/usr/lib/chromium-browser/chromium-browser --kiosk --disable-restore-session-state http://localhost`
+```
+
+
+### Install LIRC
+
+```
+sudo apt install lirc
+```
+
+#### Starting LIRCD
+
+```
+sudo /etc/init.d/lircd start
+```
+
+### Configuring
+
+Power up the Pi and SSH into it.
+
+Enter the following in the terminal to download and install LIRC. Answer 'Yes' to any questions when prompted. Note: Do not copy the '$' sign as that denotes the terminal prompt. This is to help differentiate what is a command and what are contents of a file.
+
+```
+$ sudo apt-get install lirc
+```
+
+Next we need to add two lines to '/etc/modules', but first make a backup of the modules file.
+
+```
+$ cd /etc/
+$ sudo cp modules  modules.bak
+```
+
+Then using your favorite Linux editor of choice (nano, vim, or even emacs), add the follow two lines to the bottom of the /etc/modules file.
+
+```
+lirc_dev
+lirc_rpi gpio_in_pin=23 gpio_out_pin=22
+```
+
+We also need to update boot configuration file 'boot/config.txt'. As we did for modules, we should make a back up first.
+
+```
+$ cd /boot
+$ sudo cp config.txt config.txt.bak
+```
+Then change line 51 of config.txt from
+
+```
+#dtoverlay=lirc-rpi
+```
+
+to
+
+```
+dtoverlay=lirc-rpi,gpio_in_pin=23,gpio_out_pin=22
+```
+
+A fresh install of LIRC does not contain a hardware configuration file so you have to create it. User your editor of choice and create the file '/etc/lirc/hardware.conf' with the following contents:
+
+```
+########################################################
+# /etc/lirc/hardware.conf
+#
+# Arguments which will be used when launching lircd
+LIRCD_ARGS="--uinput --listen"
+# Don't start lircmd even if there seems to be a good config file
+# START_LIRCMD=false
+# Don't start irexec, even if a good config file seems to exist.
+# START_IREXEC=false
+# Try to load appropriate kernel modules
+LOAD_MODULES=true
+# Run "lircd --driver=help" for a list of supported drivers.
+DRIVER="default"
+# usually /dev/lirc0 is the correct setting for systems using udev
+DEVICE="/dev/lirc0"
+MODULES="lirc_rpi"
+# Default configuration files for your hardware if any
+LIRCD_CONF=""
+LIRCMD_CONF=""
+######################################################## 
+```
+
+Next we need to update the '/etc/lirc/lirc_options.conf' file, but as always, make a backup first just incase.
+
+```
+$ cd /etc/lirc
+$ sudo cp lirc_options.conf lirc_options.conf.bak
+```
+
+Update line 11 of lirc_options.conf from
+
+```
+driver = devinput
+```
+
+to
+
+```
+driver=default
+```
+
+Reboot the Pi by entering the following. You will lose connection so SSH back in when the Pi is done booting up.
+
+```
+$ sudo shutdown -r now
+```
+
+To test if lirc driver is working
+
+```
+$ sudo /etc/init.d/lircd stop
+$ mode2 -d /dev/lirc0
+```
+
+<press a key in remote and you should see multple lines like below>
+
+```
+pulse 560
+space 1706
+pulse 535
+```
+
+to record a custom remote/register a remote device
+
+```
+$ sudo /etc/init.d/lircd stop
+$ sudo irrecord -d /dev/lirc0 ~/lircd.conf
+```
+
+Follow the instruction prompted by the above command carefully and at the end at least configure the ```KEY_POWER```.  At the end ```~/<device-name>.lircd.conf``` file will be generated
+
+backup the original lircd.conf
+
+```
+$ sudo mv /etc/lirc/lircd.conf /etc/lirc/lircd_original.conf
+$ sudo cp ~/<device-name>.lircd.conf /etc/lirc/lircd.conf.d/
+$ sudo /etc/init.d/lircd start
+```
+
+you can test if the recorded remote works by
+
+```
+$ irsend SEND_ONCE <device-name> KEY_POWER
+$ irsend SEND_ONCE <device-name> KEY_VOLUMEUP
+```
+
+
+

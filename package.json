@@ -1,0 +1,26 @@
+{
+  "name": "atvtt",
+  "version": "1.0.0",
+  "description": "This is a hardware and software tool that enables TVs and Set-Top-Boxes to be tested in an automated manner.",
+  "main": "index.js",
+  "dependencies": {
+    "raspivid-stream": "^0.2.1",
+    "stream-concat": "^0.1.0",
+    "stream-split": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrMiaow/atvtt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DrMiaow/atvtt/issues"
+  },
+  "homepage": "https://github.com/DrMiaow/atvtt#readme"
+}

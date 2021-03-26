@@ -6,7 +6,8 @@
   "dependencies": {
     "raspivid-stream": "^0.2.1",
     "stream-concat": "^0.1.0",
-    "stream-split": "^1.1.0"
+    "stream-split": "^1.1.0",
+    "ws": "^7.4.4"
   },
   "devDependencies": {},
   "scripts": {

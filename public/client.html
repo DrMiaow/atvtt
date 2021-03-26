@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+canvas {
+  border: 1px solid black;
+}
+</style>
+</head>
+<body>
+
+<button onclick="myFunction()">Try it</button>
+
+<p>Click the button to create a CANVAS element, with drawings (a red rectangle).</p>
+
+<script>
+function myFunction() {
+  var x = document.createElement("CANVAS");
+  var ctx = x.getContext("2d");
+  ctx.fillStyle = "#FF0000";
+  ctx.fillRect(20, 20, 150, 100);
+  document.body.appendChild(x);
+}
+</script>
 <script type="text/javascript" src="https://rawgit.com/131/h264-live-player/master/vendor/dist/http-live-player.js"></script>
 <script>
     var canvas = document.createElement("canvas");
@@ -7,3 +31,9 @@
 
     wsavc.connect("ws://192.168.1.112:8123/ws");
 </script>
+
+
+</body>
+</html>
+
+

@@ -6,9 +6,10 @@ var videoStream = raspividStream();
 // To stream over websockets:
 videoStream.on('data', (data) => {
 	console.log('got data ' + data.length)
-	console.log(data.toString('hex'))
+	//console.log(data.toString('hex'))
 
 	for (const ws of connections) {
+	 	console.log('send data ' + data.length)
 		ws.send(data, { binary: true }, (error) => { if (error) console.error(error); });	
 	}	
 });

@@ -25,7 +25,10 @@ async function startServer() {
 	wss.on('connection', (ws) => {
 		console.log('Socket connected. sending data...');
 		
-		connections.push(ws);
+		ws.on('open', (error) => {
+			console.log('WebSocket open');
+			connections.push(ws);
+		});
 
 		ws.on('error', (error) => {
 			console.log('WebSocket error');
@@ -35,7 +38,8 @@ async function startServer() {
 
 			// Remove connection from array.
 			const index = connections.indexOf(ws);
-			if (index > -1) {				
+			if (index > -1) {
+				console.log(`Removed connection at index ${index}`);
 				connections.splice(index, 1);
 			}			
 

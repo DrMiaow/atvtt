@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="James's Remote TV Controller">
+    <meta name="keywords" content="Remote TV COntrol">
+    <title>James's Remote TV Controller</title>
+</head>
+<body>
+<div id="container" style="width: 1080px; margin: 0 auto;">
+    <video latencyhint="0.0" width="1080" autoplay="true" id="player"></video>
+</div>
+<script>
+
+window.onload = function() {
+    var socketURL = 'ws://192.168.1.126:8123';
+    var jmuxer = new JMuxer({
+        node: 'player',
+        mode: 'video',
+        flushingTime: 100,
+        fps: 11,
+        debug: true,
+        clearBuffer: true
+     });
+
+     var ws = new WebSocket(socketURL);
+     ws.binaryType = 'arraybuffer';
+     ws.addEventListener('message',(event) => {
+        jmuxer.feed({
+            video: new Uint8Array(event.data)
+          });          
+     });
+
+     ws.addEventListener('error', function(e) {
+        console.log('Socket Error');
+     });
+
+     var video = document.getElementById('player');
+    video.onwaiting = function(){
+        console.log("WAITING!")
+        //showPlaceholder(placeholder, this);
+    };
+    video.onplaying = function(){
+        console.log("PLAYING!")
+        //hidePlaceholder(placeholder, this);
+    };
+
+    // Listen for key being pressed
+    window.addEventListener('keydown', (event) => {
+            event.preventDefault();
+            console.log('KEYDOWN ' + event.key)
+            ws.send(event.key);        
+        }, false);    
+
+ }
+ 
+</script>
+<script type="text/javascript" src="jmuxer.min.js"></script>
+</body>
+</html>

@@ -1,16 +1,17 @@
 const WebSocket = require('ws');
 var raspividStream = require('raspivid-stream');
 
-var videoStream = raspividStream();
+var videoStream = raspividStream({'inline':undefined});
 
 // To stream over websockets:
 videoStream.on('data', (data) => {
-	console.log('got data ' + data.length)
+	// console.log('got data ' + data.length)
 	//console.log(data.toString('hex'))
 
 	for (const ws of connections) {
 	 	console.log('send data ' + data.length)
-		ws.send(data, { binary: true }, (error) => { if (error) console.error(error); });	
+		//ws.send(data, { binary: true }, (error) => { if (error) console.error(error); });	
+		ws.send(data, { binary: true });
 	}	
 });
 
@@ -44,6 +45,8 @@ async function startServer() {
 			}			
 
 		});
+
+		connections.push(ws);
 	});
 }
 

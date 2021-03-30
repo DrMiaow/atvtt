@@ -31,19 +31,7 @@ function start() {
     var prompt = document.getElementById('prompt');
     prompt.style.display = "none";
 
-/*
-    var loc = window.location, new_uri;
-    if (loc.protocol === "https:") {
-        new_uri = "wss:";
-    } else {
-        new_uri = "ws:";
-    }
-    new_uri += "//" + loc.host;
-    if (loc.pathnamed) new_uri += loc.pathnamed;
-*/
-
-    var socketURL = 'ws://192.168.1.126:8123';
-    //var socketURL = new_uri;
+    var socketURL = 'ws://141.0.153.133:8123';
     var jmuxer = new JMuxer({
         node: 'player',
         mode: 'video',

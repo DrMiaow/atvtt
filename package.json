@@ -1,9 +1,11 @@
 {
   "name": "atvtt",
+  "type":"module",
   "version": "1.0.0",
   "description": "This is a hardware and software tool that enables TVs and Set-Top-Boxes to be tested in an automated manner.",
   "main": "index.js",
   "dependencies": {
+    "pi-camera-connect": "^0.3.4",
     "raspivid-stream": "^0.2.1",
     "stream-concat": "^0.1.0",
     "stream-split": "^1.1.0",
